@@ -1,0 +1,13 @@
+{
+	"serverCible":"SERVEUR",
+	"serverCibleSQLName" : "INSTANCE_NAME",
+	"serverCibleSQLPort" : "1433",
+	"serverURL":"hosturl_a_lancer",
+	"serverSessionId":"une session",
+	
+	"Users2Add" : ["user@kpmg.fr",
+		"toto@kpmg.fr"],
+	
+	"Users2Add_enable":true
+	
+}
