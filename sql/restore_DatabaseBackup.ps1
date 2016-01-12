@@ -52,7 +52,7 @@ Function Get_MDFLDF([string]$pBaseName, $pServerObject, [ref]$pDFN, [ref]$pDPFN,
 #GET FILE NAME and PATH FOR RESTORE DATABASE
 Function Get_LogicalNameFromBackup([string]$pBackupFullPath, $pServerObject,[ref]$pDFN,[ref]$pLFN){
 
-    #$sQuery="restore filelistonly from disk='T:\Scripts\Restore\RestoreBasesFromBlob\backups\B01_YPN_DB1999024426_20151024_170006.bak'"
+    #$sQuery="restore filelistonly from disk='T:\Scripts\Restore\RestoreBasesFromBlob\backups\Bxx_GEN_DBxxxx_20151024_170006.bak'"
     $sQuery="restore filelistonly from disk='$pBackupFullPath'"
 
     $resQuery=Invoke-Sqlcmd -Database "master" -Query $sQuery -ServerInstance $pServerObject.Name
@@ -71,9 +71,9 @@ Function Get_LogicalNameFromBackup([string]$pBackupFullPath, $pServerObject,[ref
 #GET FILE NAME and PATH FOR RESTORE DATABASE
 Function Get_DatabaseListOfUsers([string]$pBaseName, $pServerObject){
 
-$temp_listU=@("YPN_user@kpmg.fr")
+$temp_listU=@("user@tata.fr")
 
-    $sQuery="select u.name from $pBaseName.sys.database_principals u where u.name LIKE 'YPN_%'"
+    $sQuery="select u.name from $pBaseName.sys.database_principals u where u.name LIKE '%'"
     $resQuery=Invoke-Sqlcmd -Database $pBaseName -Query $sQuery -ServerInstance $pServerObject.Name
 
     if($resQuery.count -ne 0){
@@ -168,8 +168,8 @@ Function Get-FileNameBak($initialDirectory)
 } 
 Function Get-DatabaseName($pFullName){
     
-    #ex 1 : B09_YPN_DB1999134300_20151109_081853.bak = on prend YPN_DB199913430 
-    #ex 2 : YPN_DBBV_060.bak = on prend YPN_DBBV_060 
+    #ex 1 : Bxx_GEN_DBxxx_20151109_081853.bak = on prend GEN_DBxxx
+    #ex 2 : GEN_DBxxx.bak = on prend GEN_DBxxx 
     # seul limite pas de 8 caractere apres DBxxx_
     #return $pFullName
 
@@ -187,7 +187,7 @@ Function Get-DatabaseName($pFullName){
         }
 
         if($one -like "DB*"){
-            $retvalue = "YPN_" + $one
+            $retvalue = "GEN_" + $one
             $check_if_next_val_is_date=$true
         }
         
@@ -240,7 +240,7 @@ function GetDatabasePrepareResult([string]$pHttpStringResult){
     if(($pHttpStringResult -like $done_resu ) -and ($pHttpStringResult -like $total_resu )){
         return "OK SUCCESS (Done=1, Total=1)"
     }else{
-        return "KO ERROR (maybe missing in mongo - YPN_cache/databases)"
+        return "KO ERROR (maybe missing)"
     }
 
 }
@@ -373,7 +373,7 @@ if($true -eq $true){
         # Database Prepare (/force) de la base
         ##############################################
         Write-Host  -ForegroundColor Green "DATABASE PREPARE : $sBaseName"
-        LaunchDatabasePrepare -pDatabase $sBaseName.Replace("YPN_","") -pServerURL $serverURL -pSessionId $idsession
+        LaunchDatabasePrepare -pDatabase $sBaseName.Replace("GEN_","") -pServerURL $serverURL -pSessionId $idsession
         
 
         $eRestoreTime=Get-Date;
@@ -395,10 +395,7 @@ if($true -eq $true){
 #if($result -eq "Yes"){}
 
 #$list_of_users_to_add=@(
-#	'YPN_ibonnemain@kpmg.fr',
-#	'YPN_srabehi@kpmg.fr',
-#	'YPN_smaladri@kpmg.fr',
-#	'YPN_thuard@kpmg.fr',
-#    'YPN_jrpem@kpmg.fr',
-#	'YPN_nboussouhou@kpmg.fr'
+#	'toto@tata.com',
+#	'toto@tata.com',
+
 #)
